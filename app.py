@@ -9,13 +9,16 @@ app = Flask(__name__)
 import psycopg2
 
 logging.info('STARTING TAM SERVER FOR FLASK')
-conn = psycopg2.connect(
+
+def create_connection():
+    conn = psycopg2.connect(
         host="tam-postgres.postgres.database.azure.com",
         database="postgres",
         # user='postgres',
-        user = "postgres@tam-postgres",
+        user="postgres@tam-postgres",
         password='Tamana@19',
         port=5432)
+    return conn
 
 class RollNumberNotPresentError(Exception):
     pass
@@ -30,9 +33,11 @@ def StudentDetails(roll_no):
     roll_no = roll_no
     print(roll_no)
     query = 'select * from public."student" s JOIN public."address" a on s.roll_no = a.roll_no where s."roll_no"='+str(roll_no)+';'
+    conn = create_connection()
     cur = conn.cursor()
     cur.execute(query)
     result = cur.fetchall()
+    conn.close()
     print(result)
     firstname = result[0][1]
     lastname = result[0][2]
@@ -68,6 +73,7 @@ def UpdateDetails():
     lname = data['lastname']
     address = data['address']
     query1 = f"INSERT INTO public.\"student\"(\"roll_no\",\"firstname\",\"lastname\") VALUES({str(r_no)},\'{fname}\',\'{lname}\');"
+    conn = create_connection()
     cur = conn.cursor()
 
     try:
@@ -100,7 +106,7 @@ def UpdateDetails():
                  f"VALUES({str(r_no)},'{address_type}','{Hno}','{area}','{city}','{state}',{str(pincode)});"
         cur.execute(query2)
         conn.commit()
-    cur.close()
+    conn.close()
     jd = json.dumps({"status": "Sucsess",
                      "message" : message})
     return Response(jd, status=200, mimetype='application/json')
