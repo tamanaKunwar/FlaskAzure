@@ -2,11 +2,13 @@ from flask import Flask
 from flask import request, Response
 from flask import json
 from psycopg2.errors import UniqueViolation
+import logging
 
 app = Flask(__name__)
 
 import psycopg2
 
+logging.info('STARTING TAM SERVER FOR FLASK')
 conn = psycopg2.connect(
         host="tam-postgres.postgres.database.azure.com",
         database="postgres",
@@ -20,6 +22,7 @@ class RollNumberNotPresentError(Exception):
 
 @app.route("/hello")
 def hello():
+    logging.info('IN HELLO for flask')
     return Response(json.dumps({"Hello":"World"}), status=200, mimetype='application/json')
 
 @app.route("/StudentDetails/<roll_no>", methods=['GET'])
@@ -104,4 +107,5 @@ def UpdateDetails():
 
 
 if __name__ == '__main__':
+    logging.info('IN MAIN OF TAMSERVER FLASK')
     app.run()
