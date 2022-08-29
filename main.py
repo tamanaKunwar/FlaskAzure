@@ -8,9 +8,10 @@ app = Flask(__name__)
 import psycopg2
 
 conn = psycopg2.connect(
-        host="localhost",
+        host="tam-postgres.postgres.database.azure.com",
         database="postgres",
-        user='postgres',
+        # user='postgres',
+        user = "postgres@tam-postgres",
         password='Tamana@19',
         port=5432)
 
@@ -25,7 +26,7 @@ def hello():
 def StudentDetails(roll_no):
     roll_no = roll_no
     print(roll_no)
-    query = 'select * from public."Student" s JOIN public."Address" a on s.roll_no = a.roll_no where s."roll_no"='+str(roll_no)+';'
+    query = 'select * from public."student" s JOIN public."sddress" a on s.roll_no = a.roll_no where s."roll_no"='+str(roll_no)+';'
     cur = conn.cursor()
     cur.execute(query)
     result = cur.fetchall()
@@ -63,7 +64,7 @@ def UpdateDetails():
     fname = data['firstname']
     lname = data['lastname']
     address = data['address']
-    query1 = f"INSERT INTO public.\"Student\"(\"roll_no\",\"firstname\",\"lastname\") VALUES({str(r_no)},\'{fname}\',\'{lname}\');"
+    query1 = f"INSERT INTO public.\"student\"(\"roll_no\",\"firstname\",\"lastname\") VALUES({str(r_no)},\'{fname}\',\'{lname}\');"
     cur = conn.cursor()
 
     try:
@@ -92,7 +93,7 @@ def UpdateDetails():
         city = each_address.get('city')
         state = each_address.get('state')
         pincode = each_address.get('pincode')
-        query2 = f"INSERT INTO public.\"Address\"(\"roll_no\",\"address_type\",\"hno\",\"area\",\"city\",\"state\",\"pincode\") " \
+        query2 = f"INSERT INTO public.\"address\"(\"roll_no\",\"address_type\",\"hno\",\"area\",\"city\",\"state\",\"pincode\") " \
                  f"VALUES({str(r_no)},'{address_type}','{Hno}','{area}','{city}','{state}',{str(pincode)});"
         cur.execute(query2)
         conn.commit()
