@@ -26,7 +26,7 @@ def hello():
 def StudentDetails(roll_no):
     roll_no = roll_no
     print(roll_no)
-    query = 'select * from public."student" s JOIN public."sddress" a on s.roll_no = a.roll_no where s."roll_no"='+str(roll_no)+';'
+    query = 'select * from public."student" s JOIN public."address" a on s.roll_no = a.roll_no where s."roll_no"='+str(roll_no)+';'
     cur = conn.cursor()
     cur.execute(query)
     result = cur.fetchall()
