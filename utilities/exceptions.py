@@ -1,0 +1,10 @@
+class PrimaryParameterNotPresentError(Exception):
+    pass
+
+
+
+
+
+
+
+
