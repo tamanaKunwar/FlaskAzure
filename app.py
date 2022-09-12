@@ -16,8 +16,8 @@ def hello():
 @app.route("/StudentDetails/<roll_no>", methods=['GET'])
 def student_details(roll_no):
     roll_no = roll_no
-    jd = get_student_details(roll_no)
-    return Response(jd, status=200, mimetype='application/json')
+    jd, status = get_student_details(roll_no)
+    return Response(jd, status=status, mimetype='application/json')
 
 
 @app.route("/updateStudentDetails", methods = ["POST"])

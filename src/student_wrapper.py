@@ -13,6 +13,8 @@ def get_student_details(roll_no):
     query = config["DATABASE"]["GET_STUDENT_DATA"]
     query = query.format(roll_no=roll_no)
     result = execute_query(query)
+    if len(result) == 0:
+        return json.dumps({"message":"The roll_no does not exists in database"}), 404
     firstname = result[0][1]
     lastname = result[0][2]
     address_list = fetch_address_list(result)
@@ -23,7 +25,7 @@ def get_student_details(roll_no):
             "lastname": lastname,
             "address": address_list
         })
-    return jd
+    return jd, 200
 
 
 def fetch_address_list(result):
